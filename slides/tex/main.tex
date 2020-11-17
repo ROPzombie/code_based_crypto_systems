@@ -1,0 +1,67 @@
+\documentclass[11pt%
+%,draft%
+,aspectratio=169%
+]{beamer}
+%
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+%\setsansfont{Liberation Sans}
+\usepackage{polyglossia}
+\setdefaultlanguage{english}
+%
+\include{fu_beamer_template}
+%
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+%
+\usepackage{graphicx}
+
+\author{NAME}
+\title[DWARF Hacking]{Exploiting the hard-working DWARF}
+\subtitle[Exploiting Excecption Handlers]{Trojan and Exploit Techniques With No Native Executable Code}
+%\pgfdeclareimage{titlegraphic}{../res/dwarf_logo2.png}
+%\titlegraphic{\pgfuseimage{titlegraphic}}
+%\date{}
+%\subject{}
+%
+% FU settings
+\institute[FU Berlin]{Freie Universität Berlin}
+\pgfdeclareimage[height=0.9cm]{logo}{../res/dwarf_logo}
+\logo{\pgfuseimage{logo}}
+%
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Agenda}
+\tableofcontents[hideothersubsections]
+\end{frame}
+
+\section*{DWARF Summary}
+\begin{frame}{DWARF Summary}
+	\begin{itemize}
+		\item Old school: typical exploitation techniques are trying to insert shellcode (since 1980's)
+		\item Newer: trying to "borrow" necessary executable code snippets from target (end 1990/early 2000)
+		\item Current: generalization, s.t. Turing-completeness is achieved (ROP)
+		\item Other kinds of exploitable bugs: Int-overflow, parsing (mis)interpretation...
+		\item \textbf{DWARF exploitation} as an alternative exploitation technique
+		\begin{itemize}
+			\item In despite to return oriented programming (ROP) which is using its native code
+			\item DWARF allows an attacker to create a trojan payload for ELF executables without any native binary code.
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+
+
+\section{Soruces}
+\appendix
+\begin{frame}[allowframebreaks]
+  \frametitle<presentation>{Sources}
+\bibliographystyle{alpha}
+\bibliography{sources}
+\end{frame}
+\end{document}
