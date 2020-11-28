@@ -5,7 +5,7 @@
 %
 \usepackage{fontspec}
 \defaultfontfeatures{Ligatures=TeX}
-\setsansfont{Liberation Sans}
+%\setsansfont{Liberation Sans}
 \usepackage{polyglossia}
 \setdefaultlanguage{german}
 %
@@ -47,20 +47,14 @@
 		\item Grundlegende Idee: Führe absichtliche Fehler in die Chiffre ein 
 		\item Verwenden eines allgemeinen fehlerkorrigierende Codes
 		\begin{itemize}
-		    \item Dekodierung i.A. $NP$-Hart \cite[S. 479]{Schneier2007Applied}, \cite[S. 353ff]{Stinson2018Cryptography}
+		    \item Dekodierung i.A. $\mathcal{NP}$-Hart \cite[S. 479]{Schneier2007Applied}, \cite[S. 353ff]{Stinson2018Cryptography}
 		    \item Unterklasse an linearen Codes auch in $P$ lösbar $\rightarrow$ Goppa-Codes
 		\end{itemize}
-	\end{itemize}
-\end{frame}
-
-\section{Generelle Idee}
-
-\begin{frame}{Generelle Idee}
-	\begin{itemize}
-		\item 
-		Das asymmetrische McEliece Pulic-Key-Verfahren baut auf allgemein binär linearen fehlerkorrigierenden Codes auf und fügt absichtlich Fehler in eine Chiffre ein, um deren Kryptoanalyse zu erschweren.
-		\\Die grundlegende Idee basiert auf der Verwendung eines allgemeinen fehlerkorrigierenden Codes, da die Dekodierung solcher Codes ein NP schweres Problem ist. Für bestimmte Code-Untergruppen wie z.B. Goppa-Codes ist hierbei eine Lösung in poynomialer Zert möglich.
-		
+		\item Angreifer ohne Goppa-Code kann nur in $\mathcal{P}$, also polynomiell viel rechnen
+		\begin{itemize}
+		    \item Die Entschlüsselung eines zufälligen linearen codes ist ein $\mathcal{NP}$-Hartes Problem -> QUELLE!
+		    \item Die Generatormatrix eines Goppa-Codes sieht zufällig aus -> QUELLE
+		\end{itemize}
 	\end{itemize}
 \end{frame}
 
@@ -70,36 +64,59 @@
 \tableofcontents[currentsection,currentsubsection]
 \end{frame}
 
+\begin{frame}{Hamming Gewicht}
+	\begin{itemize}
+		\item Das Hamming Gewicht eines Vektors $x$ der Länge $n$ ist definiert als:
+		       \[ weight_{\Delta}(x):= \sum_{i=1}^n weight_{\Delta}(x_i)  \]
+		       \\mit\\ $weight_{\Delta}(x_i) = 1: x_i \neq 0$, \\$weight_{\Delta}(x_i) =0 : x_i = 0$ 
+     	\item Beispiel:
+					$$
+					weight_{\Delta}(\underline{1}00\underline{1})  = 2
+					$$
+	\end{itemize}
+\end{frame}
+
 \subsection{Hamming Distanz}
+
 \begin{frame}{Hamming Distanz}
 	\begin{itemize}
 		\item Die Hamming Distanz $d$ ist ein Maß für die Unterschiedlichkeit von Zeichenketten und ist eine Metrik auf dem Coderaum.
 		\\Es sei $\Sigma$ ein diskretes Alphabet und $c_1=(c_{1_1},\ldots,c_{1_n})$ ,$c_2=(c_{2_1},\ldots,c_{2_n})$ Codeworte mit je $n$ Buchstaben aus $\Sigma^n$, von denen die Teilmenge  $C\subseteq\Sigma^n$ die gültigen Codeworte darstellt. 
-		\\Die Hamming Distanz zwischen $c_1$ und $c_2$ ist definiert als \[\Delta(c_1,c_2):=|\{i \in \{1,\ldots,n\}| c_{1_i}\neq c_{2_i} \}|\]
+		Die Hamming Distanz zwischen $c_1$ und $c_2$ ist definiert als \[\Delta(c_1,c_2):=|\{i \in \{1,\ldots,n\}| c_{1_i}\neq c_{2_i} \}|\]
 		\item Beispiel:
+					$ 11011001\oplus 10011101 = 0\underline{1}000\underline{1}00 
+					\implies \Delta(11011001,10011101) = 2
+					$
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Hamming Distanz}
+	\begin{itemize}
+	
 		\item Für mehr als zwei Worte versteht man das Minimum aller Abstände zwischen verschiedenen Wörtern innerhalb des Codes als deren Hamming Distanz.
 		\[d=\Delta(C):= \min_{\forall i,j \in \{1,\ldots,n\}|i\neq j}\Delta(c_i,c_j)\]
-		\item Beispiel:
-	
-		
+		\item Beispiel:\\
+		$ 010\oplus 011 = 00\underline{1}\implies \Delta(010,011) = 1	$\\$ 010\oplus 101 = \underline{1}\underline{1}\underline{1}\implies \Delta(010,101) = 3$\\ $011\oplus 101 = \underline{1}\underline{1}0
+		\implies \Delta(011,101) = 2 $\\$d=\min\{1,3,2\}=1$
 	\end{itemize}
 \end{frame}
 
 \subsection{Linear-Codes}
 \begin{frame}{Linear-Codes}
 	\begin{itemize}
-		\item Ein Blockcode $C\subseteq\Sigma^n$ heißt linearer Code, wenn die Summer zweier Codewörter wieder ein Codewort ist, d.h. wenn gilt:
+		\item Ein binärer Blockcode $C\subseteq GF(2^n) \subseteq \Sigma^n$ heißt linearer Code, wenn die Modulo-Summe zweier Codewörter wieder ein Codewort ist, d.h. wenn gilt:
 			\[\forall c_1,c_2 \in C \colon c1\oplus c2 \in C \]
-			$C$ bildet damit einen Vektorraum und ist Unterraum des Vektorraumes $\Sigma^n$.
-			\item Beispiel:
-			\item Es sei die k die Dimension des Vektorraumes in dem sich der lineare Code $C$ befindet, so nennt man $C$ einen $[n,k]$-Code. Bei gegebener Hamming Distanz $d$ wird dieser auch $[n,k,d]$-Code genannt.
-	
+			$C$ bildet damit einen Vektorraum und ist Unterraum des Vektorraumes $GF(2^n)$.
+		\item Es sei die $k$ die Dimension des Vektorraumes in dem sich der lineare Code $C$ befindet, so nennt man $C$ einen $(n,k)$-Code. Bei gegebener Hamming Distanz $d$ wird dieser auch $(n,k,d)$-Code genannt. 
 	\end{itemize}
 \end{frame}
 
+
 \subsection{Goppa-Codes}
+
 \begin{frame}{(binary) Goppa-Codes}
 	\begin{itemize}
+		\item Ein irreduzibler binärer Goppa-Code ist ein $[n,k,d]$-Code, der durch ein Generatorpolynom $g(x)$ vom Grad $t$ und einer Sequenz $L$ mit $n$ Elementen, über dem endlichen Körper $GF(2^n)$ definiert ist. 
 		\item 
 	\end{itemize}
 \end{frame}
@@ -114,22 +131,29 @@
 	\begin{itemize}
 		\item Einleitender Foobar Kram aus: \cite{Stinson2018Cryptography}
 	\end{itemize}
+	\begin{figure}
+	    \centering
+	    \includegraphics[scale=0.6]{pictures/mceliece.png}
+	    \caption{Caption}
+	    \label{fig:mceliece_overvie }
+	\end{figure}
 \end{frame}
 
 \subsection{McEliece-Kryptosystem}
 
 \begin{frame}{Grundlegende Idee McEliece Kryptosystem}
 	\begin{itemize}
-		\item Transformiere Klartext $m$ mithilfe einer Generator-Matrix in Goppa-Code
+		\item Transformiere Klartext $m$ (Message) mithilfe einer Generator-Matrix in allgemeinen Goppa-Code
 		\item Multiplikation mit randomisierten Matrizen führt zu allgemeinem linearen Code
 		\begin{itemize}
-		    \item Konfusion \& Diffusion
+		    \item Gist: Reihe von Matrix-Multiplikationen ist Verschlüsselung
 		\end{itemize}
-		\item Retransformation ohne Matrizen in Goppa-Code ist problemtisch: $NP$-Hart
-        \item Öffentlicher Schlüssel: $M_G$
+		\item Retransformation ohne Matrizen in Goppa-Code ist problemtisch: $\mathcal{NP}$-Hart \cite{Stinson2018Cryptography}
+        \item Öffentlicher Schlüssel:
         \begin{itemize}
-            \item Anzahl der maximal eingebauten Fehler in der Chiffre $c$
-            \item D.h. Anzahl der Bits, die invertiert werden sollen
+            \item Beinhaltet Generator-Matrix zur Umwandlung in allg. linearen Code
+            \item Zusätzlich: Anzahl der maximal einbaubaren Fehler in der Chiffre $c$
+            \item Fehler sind also die Anzahl der Bits, die invertiert werden sollen
         \end{itemize}
 	    \item Privater Schlüssel: Umwandlung des allgemeinen, linearen Codes in Goppa-Code
 	    \begin{itemize}
@@ -138,11 +162,12 @@
 	    \end{itemize}
 	\end{itemize}
 \end{frame}
+ 
 
 \subsection{Parameter Definitionen}
 \begin{frame}{Parameter Definitionen}
     \begin{itemize}
-        \item Systemparameter $m$ gibt die Blockgröße an
+        \item Systemparameter $m$ gibt die Blockgröße an, für zu verschlüsselnde Nachricht
         \item $C$ sei ein binärer $(n,k)$ Goppa-Code mit $t$ effizient korrigierbaren Fehlern
         \item $t$ gibt die maximale Anz. eff. korrigierbarer Fehler durch Goppa-Code $C$
         \item Daraus ergeben sich:
@@ -154,8 +179,8 @@
     \end{itemize}   
 \end{frame}
 
-\subsection{McEliece-Algorithmus}
-\begin{frame}{McEliece-Algorithmus}
+\subsection{McEliece Algorithmus}
+\begin{frame}{McEliece als Kryptografisches Shema}
     \begin{itemize}
         \item Das \emph{McEliece}-Kryptosystem $\Pi := (Gen, Enc, Dec)$
         \item Wobei:
@@ -174,20 +199,20 @@
 \subsection{Schlüsselerzeugung $Gen$}
 \begin{frame}{Schlüsselerzeugung $Gen$}
 \begin{itemize}
-    \item Erzeuge Generator-Matrix $G$ $\dim{G} = k \times n$ für Goppa-Code $C$
+    \item Erzeuge Generator-Matrix $G^{k \times n}$  für Goppa-Code $C$
     \begin{itemize}
         \item Matrix aus der binärer Klartext mit Länge $k$ die Chiffre der Länge $n$ berechnet werden kann
     \end{itemize}
-    \item Erzeuge zufällige, binäre, nicht singuläre\footnote{M.a.W. $S$ ist regulär, $\det S \neq 0$; wichtig für Invertierbarkeit} \emph{Scramble-Matrix} $S := k \times k$
+    \item Erzeuge zufällige, binäre, nicht singuläre\footnote{M.a.W. $S$ ist regulär, $\det S \neq 0$; wichtig für Invertierbarkeit} \emph{Scramble-Matrix} $S^{k \times k}$
     \begin{itemize}
         \item $S$ muss in $\mathbb{Z}_2$ invertierbar sein
     \end{itemize}
-    \item Permutationsmatrix $P$ der Größe $n \times n$
+    \item Permutationsmatrix $P^{n \times n}$
     \begin{itemize}
-        \item Binärmatrix, mit in jede Zeile genau ein 1 Element enthalten ist
+        \item Binärmatrix, je Zeile genau ein 1 Element enthalten ist
     \end{itemize}
-    \item Berechne: $\hat{G} = SGP$ mit $k \times n$
-    \item Schlüssel: $K := (GmS,P,\hat{G},t)$
+    \item Berechne: $\hat{G}^{k \times n} = S \cdot G \cdot P$
+    \item Schlüssel: $K := (G,S,P,\hat{G},t)$\footnote{McEliece fixiert $t=50$, als Maximalwert \cite{McEliece1978public}}
     \begin{itemize}
         \item Öffentlicher Schlüssel: $K_{pub}:= (\hat{G}, t)$
         \item Privater Schlüssel: $K_{priv} := (G,S,P)$
@@ -246,6 +271,10 @@ Berechnung des öffentlichen Schlüssels $\hat{G} = S \cdot G \cdot P$:
 $$
     \hat{G}=\begin{pmatrix} 1 & 1 & 0 & 1 \\ 1 & 0 & 0 & 1 \\ 0 & 1 & 1 & 1 \\ 1 & 1 & 0 & 0 \end{pmatrix} \cdot \begin{pmatrix} 1 & 0 & 0 & 0 & 1 & 1 & 0 \\ 0 & 1 & 0 & 0 & 1 & 0 & 1 \\ 0 & 0 & 1 & 0 & 0 & 1 & 1 \\ 0 & 0 & 0 & 1 & 1 & 1 & 1 \end{pmatrix} \cdot \begin{pmatrix} 0 & 1 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 & 0 & 0 & 1 \\ 1 & 0 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & 1 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 0 & 1 & 0 & 0 \end{pmatrix}=
 $$
+\end{frame}
+
+\begin{frame}{Beispiel McElicece-Kryptosystem, cont'}
+Berechnung des öffentlichen Schlüssels $\hat{G} = S \cdot G \cdot P$:
 $$
     =\begin{pmatrix} 1 & 1 & 0 & 1 & 1 & 0 & 0 \\ 1 & 0 & 0 & 1 & 0 & 0 & 1 \\ 0 & 1 & 1 & 1 & 0 & 0 & 1 \\ 1 & 1 & 0 & 0 & 0 & 1 & 1 \end{pmatrix} \cdot \begin{pmatrix} 0 & 1 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 & 0 & 0 & 1 \\ 1 & 0 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & 1 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 0 & 1 & 0 & 0 \end{pmatrix}= \begin{pmatrix} 1 & 1 & 1 & 1 & 0 & 0 & 0 \\ 1 & 1 & 0 & 0 & 1 & 0 & 0 \\ 1 & 0 & 0 & 1 & 1 & 0 & 1 \\ 0 & 1 & 0 & 1 & 1 & 1 & 0 \end{pmatrix}
 $$
@@ -298,7 +327,9 @@ Invertierung der Permuation $\hat{c} = cP^{-1}$
 \subsection{Vor- \& Nachteile}
 \begin{frame}{Vor- \& Nachteile}
     \begin{itemize}
-        \item The good news: Es McEliece gab keine erfolgreichen Angriffe gegen das McEliece-Verfahren 
+        \item The good news: Es gab keine erfolgreichen Angriffe gegen das McEliece-Verfahren
+        \item Verhfahren gilt als  \emph{IND-CCA2} \cite{dottling2012cca2} sicher, somit ist es auch \emph{IND-CPA} sicher \cite{nojima2008semantic}
+        \item Angriffe McEliece mit originalen Parametern von 1978 in 1400 Tagen (Einzelne Machine) oder in 7 Tagen mithilfe von 200 CPUs \cite{baldi2016enhanced}, \cite{canteaut1998cryptanalysis}
         \item Jedoch:
         \begin{itemize}
             \item Bruce Schneier: McEliece-Kryptosystem etwa 2 bis 3 mal langsamer als RSA \cite[S. 479ff]{Schneier2007Applied}
