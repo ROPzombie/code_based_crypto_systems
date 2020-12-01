@@ -8,14 +8,29 @@
 %\setsansfont{Liberation Sans}
 \usepackage{polyglossia}
 \setdefaultlanguage{german}
+
 %
 \include{fu_beamer_template}
+%biber stuff
+\usepackage[
+  backend=biber,
+  bibencoding=utf8,
+  style=alphabetic,
+  %citestyle=authoryear-comp
+]{biblatex}
+\bibliography{sources.bib}
 %
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+
+\usepackage[backend=biber]{biblatex}
+
 %
 \usepackage{graphicx}
+%tikz stuff
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows}
 
 \author{Lea Muth \and Benjamin Tröster}
 \title[Code-basierte Kryptografie]{Einführung Code-basierte Kryptografie}
@@ -52,8 +67,8 @@
 		\end{itemize}
 		\item Angreifer ohne Goppa-Code kann nur in $\mathcal{P}$, also polynomiell viel rechnen
 		\begin{itemize}
-		    \item Die Entschlüsselung eines zufälligen linearen codes ist ein $\mathcal{NP}$-Hartes Problem -> QUELLE!
-		    \item Die Generatormatrix eines Goppa-Codes sieht zufällig aus -> QUELLE
+		    \item Die Entschlüsselung eines zufälligen linearen Codes ist ein $\mathcal{NP}$-Hartes Problem -> \cite{ljubic2004exact}
+		    \item Die Generatormatrix eines Goppa-Codes sieht zufällig aus ->  \cite{6553164} 
 		\end{itemize}
 	\end{itemize}
 \end{frame}
@@ -63,7 +78,7 @@
 \begin{frame}{Fahrplan Grundlagen}
 \tableofcontents[currentsection,currentsubsection]
 \end{frame}
-
+\subsection{Hamming Gewicht und Distanz}
 \begin{frame}{Hamming Gewicht}
 	\begin{itemize}
 		\item Das Hamming Gewicht eines Vektors $x$ der Länge $n$ ist definiert als:
@@ -76,48 +91,72 @@
 	\end{itemize}
 \end{frame}
 
-\subsection{Hamming Distanz}
+
 
 \begin{frame}{Hamming Distanz}
 	\begin{itemize}
-		\item Die Hamming Distanz $d$ ist ein Maß für die Unterschiedlichkeit von Zeichenketten und ist eine Metrik auf dem Coderaum.
-		\\Es sei $\Sigma$ ein diskretes Alphabet und $c_1=(c_{1_1},\ldots,c_{1_n})$ ,$c_2=(c_{2_1},\ldots,c_{2_n})$ Codeworte mit je $n$ Buchstaben aus $\Sigma^n$, von denen die Teilmenge  $C\subseteq\Sigma^n$ die gültigen Codeworte darstellt. 
-		Die Hamming Distanz zwischen $c_1$ und $c_2$ ist definiert als \[\Delta(c_1,c_2):=|\{i \in \{1,\ldots,n\}| c_{1_i}\neq c_{2_i} \}|\]
+		\item Sei $\Sigma$ ein diskretes Alphabet und $c_1=(c_{1_1},\ldots,c_{1_n})$ ,$c_2=(c_{2_1},\ldots,c_{2_n})$ Codewörter sodass $c_1, c_2 \in C\subseteq\Sigma^n$, wboei $C$ die Menge der gültigen Codeworte darstellt
+		\item Hamming Distanz $d$ zwischen $c_1$ und $c_2$ ist definiert als: 
+		\[\Delta(c_1,c_2):=|\{i \in \{1,\ldots,n\}| c_{1_i}\neq c_{2_i} \}
+		\]
 		\item Beispiel:
-					$ 11011001\oplus 10011101 = 0\underline{1}000\underline{1}00 
-					\implies \Delta(11011001,10011101) = 2
-					$
+			\begin{align*}
+		        11011001\oplus 10011101 = 0\underline{1}000\underline{1}00 &\implies \Delta(11011001,10011101) = 2
+		    \end{align*}
 	\end{itemize}
 \end{frame}
 
 \begin{frame}{Hamming Distanz}
 	\begin{itemize}
-	
 		\item Für mehr als zwei Worte versteht man das Minimum aller Abstände zwischen verschiedenen Wörtern innerhalb des Codes als deren Hamming Distanz.
 		\[d=\Delta(C):= \min_{\forall i,j \in \{1,\ldots,n\}|i\neq j}\Delta(c_i,c_j)\]
+		\item Beispiel:
+		\begin{align*}
+		    010\oplus 011 = 00\underline{1} &\implies \Delta(010,011) = 1\\
+		    010\oplus 101 = \underline{1}\underline{1}\underline{1} &\implies \Delta(010,101) = 3\\
+		    011\oplus 101 = \underline{1}\underline{1}0 &\implies \Delta(011,101) = 2
+		\end{align*}
+		$$ 
+		d=\min\{1,3,2\}=1
+		$$
+	\end{itemize}
+\end{frame}
+\subsection{Galoiskörper}
+\begin{frame}{Galoiskörper}
+	\begin{itemize}
+		\item Ein endlicher Körper der abgeschlossen bezüglich '$+$' und '$*$'.\\
 		\item Beispiel:\\
-		$ 010\oplus 011 = 00\underline{1}\implies \Delta(010,011) = 1	$\\$ 010\oplus 101 = \underline{1}\underline{1}\underline{1}\implies \Delta(010,101) = 3$\\ $011\oplus 101 = \underline{1}\underline{1}0
-		\implies \Delta(011,101) = 2 $\\$d=\min\{1,3,2\}=1$
+		   Die Restklassen modulo 2 bilden den Körper $\mathbb{F}_{2} = GF(2)$. \cite{Kunz1991}\\
+		   \begin{itemize}		  
+		   	\item Addition: $0+0=0$, $0+1=1$, $1+0=1$, $1+1=0$ \\
+		    \item Multiplikation: $0*0 = 0*1 = 1*0 = 0$, $1*1=1$ 	
+		   	\end{itemize}
 	\end{itemize}
 \end{frame}
 
 \subsection{Linear-Codes}
 \begin{frame}{Linear-Codes}
 	\begin{itemize}
-		\item Ein binärer Blockcode $C\subseteq GF(2^n) \subseteq \Sigma^n$ heißt linearer Code, wenn die Modulo-Summe zweier Codewörter wieder ein Codewort ist, d.h. wenn gilt:
+		\item Ein binärer Blockcode $C\subseteq GF(2^n) \subseteq \Sigma^n$ heißt linearer Code, wenn gilt:
 			\[\forall c_1,c_2 \in C \colon c1\oplus c2 \in C \]
-			$C$ bildet damit einen Vektorraum und ist Unterraum des Vektorraumes $GF(2^n)$.
-		\item Es sei die $k$ die Dimension des Vektorraumes in dem sich der lineare Code $C$ befindet, so nennt man $C$ einen $(n,k)$-Code. Bei gegebener Hamming Distanz $d$ wird dieser auch $(n,k,d)$-Code genannt. 
+		\item Bei gegebener Hamming Distanz $d$ wird der Code C auch $(n,k,d)$-Code genannt. 
 	\end{itemize}
 \end{frame}
 
 
 \subsection{Goppa-Codes}
 
+\begin{frame}{Goppa-Codes}
+	\begin{itemize}
+		\item Ein Goppa Polynom $g_i \in GF(p^m)$ wird definiert durch:
+			\[ g(x) = g_0+g_1x +\ldots+ g_tx^t = \sum_{i=0}^t g_ix^i \]
+		\item Es sei L eine endliche Untergruppe $GF(p^m)$, wobei p eine Primzahl ist.
+			\[L =\{\alpha_1,\ldots\alpha_n\}\subseteq GF(p^m) \] mit $g(\alpha_i)\neq 0~ \forall \alpha_i \in L$. 
+	\end{itemize}
+\end{frame}
 \begin{frame}{(binary) Goppa-Codes}
 	\begin{itemize}
-		\item Ein irreduzibler binärer Goppa-Code ist ein $[n,k,d]$-Code, der durch ein Generatorpolynom $g(x)$ vom Grad $t$ und einer Sequenz $L$ mit $n$ Elementen, über dem endlichen Körper $GF(2^n)$ definiert ist. 
-		\item 
+		\item Ein binärer Goppa-Code $\Gamma(L,g(x))$ ist ein $(n,k,d)$-Code, der durch ein Generatorpolynom $g(x) \in GF(2^n)$ vom Grad $t$ und einer Sequenz $L$, über dem endlichen Körper $GF(2^n)$ definiert ist. 
 	\end{itemize}
 \end{frame}
 
@@ -127,17 +166,6 @@
 \tableofcontents[currentsection,currentsubsection]
 \end{frame}
 
-\begin{frame}{Code-basierte Kryptografie}
-	\begin{itemize}
-		\item Einleitender Foobar Kram aus: \cite{Stinson2018Cryptography}
-	\end{itemize}
-	\begin{figure}
-	    \centering
-	    \includegraphics[scale=0.6]{pictures/mceliece.png}
-	    \caption{Caption}
-	    \label{fig:mceliece_overvie }
-	\end{figure}
-\end{frame}
 
 \subsection{McEliece-Kryptosystem}
 
@@ -169,7 +197,7 @@
     \begin{itemize}
         \item Systemparameter $m$ gibt die Blockgröße an, für zu verschlüsselnde Nachricht
         \item $C$ sei ein binärer $(n,k)$ Goppa-Code mit $t$ effizient korrigierbaren Fehlern
-        \item $t$ gibt die maximale Anz. eff. korrigierbarer Fehler durch Goppa-Code $C$
+        \item $t$ gibt die maximale Anz. eff. korrigierbarer Fehler durch Goppa-Code $C$ \footnote{McEliece fixiert $t=50$, als Maximalwert \cite{McEliece1978public}}
         \item Daraus ergeben sich:
         \begin{itemize}
             \item Blocklänge Chiffretext: $n = 2^m$
@@ -180,7 +208,7 @@
 \end{frame}
 
 \subsection{McEliece Algorithmus}
-\begin{frame}{McEliece als Kryptografisches Shema}
+\begin{frame}{McEliece als CPA-Sicheres kryptografisches Shema}
     \begin{itemize}
         \item Das \emph{McEliece}-Kryptosystem $\Pi := (Gen, Enc, Dec)$
         \item Wobei:
@@ -211,10 +239,10 @@
     \begin{itemize}
         \item Binärmatrix, je Zeile genau ein 1 Element enthalten ist
     \end{itemize}
-    \item Berechne: $\hat{G}^{k \times n} = S \cdot G \cdot P$
-    \item Schlüssel: $K := (G,S,P,\hat{G},t)$\footnote{McEliece fixiert $t=50$, als Maximalwert \cite{McEliece1978public}}
+    \item Berechne: $G'^{k \times n} = S \cdot G \cdot P$
+    \item Schlüssel: $K := (G,S,P,G',t)$
     \begin{itemize}
-        \item Öffentlicher Schlüssel: $K_{pub}:= (\hat{G}, t)$
+        \item Öffentlicher Schlüssel: $K_{pub}:= (G', t)$
         \item Privater Schlüssel: $K_{priv} := (G,S,P)$
     \end{itemize}
 \end{itemize}
@@ -224,21 +252,34 @@
 \begin{frame}{Verschlüsselung $Enc$}
     \begin{itemize}
         \item Nachricht in Blöcke, sodass $m \in \mathbb{Z}_2^k$
-        \item $Enc_{pub}(m,z) = c = m\hat{G} + z$
         \item Sei $z \in \mathbb{Z}_2^n$ ein belieber Vektor der Länge $n$, mit maximaler Gewichtung $t$
-        \item Gewichtung $t$: maximale Anzahl Einsen in $z$
-        \item Fehlervektor erlaubt es Chiffre an maximal $t$ Stellen zu invertieren
+        \begin{itemize}
+            \item Gewichtung $t$: maximale Anzahl Einsen in $z$
+            \item Fehlervektor erlaubt es Chiffre an maximal $t$ Stellen zu invertieren
+        \end{itemize}   
+        \item $Enc_{pub}(m,z) = c = m \cdot G + z$
     \end{itemize}
 \end{frame}
     
 \subsection{Entschlüsselung $Dec$}
 \begin{frame}{Entschlüsselung $Dec$}
     \begin{itemize}
-        \item Berechne $\hat{c} = cP^{-1}$
-        \item Anwenden der $decode(c)$ des Goppa-Codes auf $\hat{c}$, sodass $\hat{m}$ gefunden werden kann
-        \item Hamming-Distanz: $d_H(\hat{m}G, \hat{c}) \leq t$
-        \item Eigentliche Entschlüsselung: $m = \hat{m}S^{-1}$
+        \item Berechne $c' = cP^{-1}$
+        \begin{itemize}
+            \item $c' = c \cdot P^{-1} = (mG' + z) \cdot P^{-1} = (mG'\cdot P^{-1} + z\cdot P^{-1}) = m (SGP\cdot P^{-1}) + z\cdot P^{-1}$
+        \end{itemize}
+        \item Anwenden $decode(c')$ des Goppa-Codes auf $c'$, sodass $m'$ gefunden werden kann
+        \begin{itemize}
+            \item Rausrechnen des Fehlervektors $z$
+            \item D.h. wir erhalten: $m' = m (SGP\cdot P^{-1}) = m\cdot SG$
+            \item Hamming-Distanz: $d_H(m'G, c') \leq t$
+            \begin{itemize}
+                \item Invertiere mit Generatormatrix $G$ 
+            \end{itemize}
+        \end{itemize}
+        \item Multiplikation mit $S^{-1}$: $m = m'S^{-1}$
         \item Kompakt: $dec_{priv}(c) = decode(cP^{-1}) \cdot S^{-1}$
+
     \end{itemize}    
 \end{frame}
 
@@ -267,23 +308,23 @@
 \end{frame}
 
 \begin{frame}{Beispiel McElicece-Kryptosystem, cont'}
-Berechnung des öffentlichen Schlüssels $\hat{G} = S \cdot G \cdot P$:
+Berechnung des öffentlichen Schlüssels $G' = S \cdot G \cdot P$:
 $$
-    \hat{G}=\begin{pmatrix} 1 & 1 & 0 & 1 \\ 1 & 0 & 0 & 1 \\ 0 & 1 & 1 & 1 \\ 1 & 1 & 0 & 0 \end{pmatrix} \cdot \begin{pmatrix} 1 & 0 & 0 & 0 & 1 & 1 & 0 \\ 0 & 1 & 0 & 0 & 1 & 0 & 1 \\ 0 & 0 & 1 & 0 & 0 & 1 & 1 \\ 0 & 0 & 0 & 1 & 1 & 1 & 1 \end{pmatrix} \cdot \begin{pmatrix} 0 & 1 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 & 0 & 0 & 1 \\ 1 & 0 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & 1 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 0 & 1 & 0 & 0 \end{pmatrix}=
+    G'=\begin{pmatrix} 1 & 1 & 0 & 1 \\ 1 & 0 & 0 & 1 \\ 0 & 1 & 1 & 1 \\ 1 & 1 & 0 & 0 \end{pmatrix} \cdot \begin{pmatrix} 1 & 0 & 0 & 0 & 1 & 1 & 0 \\ 0 & 1 & 0 & 0 & 1 & 0 & 1 \\ 0 & 0 & 1 & 0 & 0 & 1 & 1 \\ 0 & 0 & 0 & 1 & 1 & 1 & 1 \end{pmatrix} \cdot \begin{pmatrix} 0 & 1 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 & 0 & 0 & 1 \\ 1 & 0 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & 1 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 0 & 1 & 0 & 0 \end{pmatrix}=
 $$
 \end{frame}
 
 \begin{frame}{Beispiel McElicece-Kryptosystem, cont'}
-Berechnung des öffentlichen Schlüssels $\hat{G} = S \cdot G \cdot P$:
+Berechnung des öffentlichen Schlüssels $G' = S \cdot G \cdot P$:
 $$
     =\begin{pmatrix} 1 & 1 & 0 & 1 & 1 & 0 & 0 \\ 1 & 0 & 0 & 1 & 0 & 0 & 1 \\ 0 & 1 & 1 & 1 & 0 & 0 & 1 \\ 1 & 1 & 0 & 0 & 0 & 1 & 1 \end{pmatrix} \cdot \begin{pmatrix} 0 & 1 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 1 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 & 0 & 0 & 1 \\ 1 & 0 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & 1 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 & 0 & 1 & 0 \\ 0 & 0 & 0 & 0 & 1 & 0 & 0 \end{pmatrix}= \begin{pmatrix} 1 & 1 & 1 & 1 & 0 & 0 & 0 \\ 1 & 1 & 0 & 0 & 1 & 0 & 0 \\ 1 & 0 & 0 & 1 & 1 & 0 & 1 \\ 0 & 1 & 0 & 1 & 1 & 1 & 0 \end{pmatrix}
 $$
 \end{frame}
 
 \begin{frame}{Beispiel McElicece-Kryptosystem, cont'}
-Der öffentlichen Schlüssels $K_{pub} = (\hat{G},t)$:
+Der öffentlichen Schlüssels $K_{pub} = (G',t)$:
 $$
-    K_{pub} = (\hat{G},t) =\left(\begin{pmatrix} 1 & 1 & 1 & 1 & 0 & 0 & 0 \\ 1 & 1 & 0 & 0 & 1 & 0 & 0 \\ 1 & 0 & 0 & 1 & 1 & 0 & 1 \\ 0 & 1 & 0 & 1 & 1 & 1 & 0 \end{pmatrix},1\right)
+    K_{pub} = (G',t) =\left(\begin{pmatrix} 1 & 1 & 1 & 1 & 0 & 0 & 0 \\ 1 & 1 & 0 & 0 & 1 & 0 & 0 \\ 1 & 0 & 0 & 1 & 1 & 0 & 1 \\ 0 & 1 & 0 & 1 & 1 & 1 & 0 \end{pmatrix},1\right)
 $$
 \end{frame}
 
@@ -291,7 +332,7 @@ $$
 Nachricht $m = \begin{pmatrix} 1 1 0 1 \end{pmatrix}$, Fehlervektor $z$ mit maximalem Gewicht $t = 1$ und Länge $n = 7$: \\
 Wähle $z =  \begin{pmatrix} 0 0 0 0 1 0 0 \end{pmatrix}$ 
 $$
-    Enc_{pub}(m,z) = c = m\hat{G} + z
+    Enc_{pub}(m,z) = c = m \cdot G' + z
 $$
 \begin{align*}
     m &= \begin{pmatrix} 1 & 1 & 0 & 1 \end{pmatrix} \cdot \begin{pmatrix} 1 & 1 & 1 & 1 & 0 & 0 & 0 \\ 1 & 1 & 0 & 0 & 1 & 0 & 0 \\ 1 & 0 & 0 & 1 & 1 & 0 & 1 \\ 0 & 1 & 0 & 1 & 1 & 1 & 0 \end{pmatrix} + \begin{pmatrix} 0 & 0 & 0 & 0 & 1 & 0 & 0 \end{pmatrix}\\
@@ -302,9 +343,9 @@ $$
 
 \begin{frame}{Beispiel McElicece-Kryptosystem, cont'}
 Entschlüsselung der Chiffre:\\
-Invertierung der Permuation $\hat{c} = cP^{-1}$
+Invertierung der Permuation $c' = cP^{-1}$
 \begin{align*}
-       c &= \begin{pmatrix} 0 & 1 & 1 & 0 & 1 & 1 & 0 \end{pmatrix} \cdot \begin{pmatrix} 0 & 0 & 0 & 1 & 0 & 0 & 0 \\ 1 & 0 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 & 1 & 0 & 0 \\ 0 & 1 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 & 0 & 0 & 1 \\ 0 & 0 & 0 & 0 & 0 & 1 & 0 \\ 0 & 0 & 1 & 0 & 0 & 0 & 0 \end{pmatrix}\\
+       c' &= \begin{pmatrix} 0 & 1 & 1 & 0 & 1 & 1 & 0 \end{pmatrix} \cdot \begin{pmatrix} 0 & 0 & 0 & 1 & 0 & 0 & 0 \\ 1 & 0 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 & 1 & 0 & 0 \\ 0 & 1 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & 0 & 0 & 0 & 1 \\ 0 & 0 & 0 & 0 & 0 & 1 & 0 \\ 0 & 0 & 1 & 0 & 0 & 0 & 0 \end{pmatrix}\\
        &= \begin{pmatrix} 1 & 0 & 0 & 0 & 1 & 1 & 1 \end{pmatrix}
 \end{align*}
 \end{frame}
@@ -313,12 +354,12 @@ Invertierung der Permuation $\hat{c} = cP^{-1}$
 \begin{itemize}
     \item Dekodierung des Hamming-Codes:
     \item Berehcne Hamming-Distanz $d$ der Generator-Matrix $G$: $\begin{pmatrix} 1 & 3 & 3 & 2 \end{pmatrix}$
-    \item Somit ist $\hat{m} = \begin{pmatrix} 1 & 0 & 0 & 0\end{pmatrix}$
+    \item Somit ist $m' = \begin{pmatrix} 1 & 0 & 0 & 0\end{pmatrix}$
     \item Berechne Klartext $m$
 \end{itemize}
 
 \begin{align*}
-        m &= \hat{m}S^{-1}=\\
+        m &= m'S^{-1}=\\
         &= \begin{pmatrix} 1 & 0 & 0 & 0 \end{pmatrix} \cdot \begin{pmatrix} 1 & 1 & 0 & 1 \\ 1 & 1 & 0 & 0 \\ 0 & 1 & 1 & 1 \\ 1 & 0 & 0 & 1 \end{pmatrix}\\
         &= \begin{pmatrix} 1 & 1 & 0 & 1 \end{pmatrix}
 \end{align*}
@@ -343,8 +384,7 @@ Invertierung der Permuation $\hat{c} = cP^{-1}$
 \section{Quellen}
 \appendix
 \begin{frame}[allowframebreaks]
-  \frametitle<presentation>{Sources}
-\bibliographystyle{alpha}
-\bibliography{sources}
+  \frametitle<presentation>{Quellen}
+\printbibliography
 \end{frame}
 \end{document}

@@ -1,0 +1,374 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.1 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{anyt/global//global/global}
+    \entry{baldi2016enhanced}{article}{}
+      \name{author}{5}{}{%
+        {{hash=89e88c59e7bb5cfde7e8a85c9e75c719}{%
+           family={Baldi},
+           familyi={B\bibinitperiod},
+           given={Marco},
+           giveni={M\bibinitperiod}}}%
+        {{hash=39c4d47f47815cde4fe132d0e5470e99}{%
+           family={Bianchi},
+           familyi={B\bibinitperiod},
+           given={Marco},
+           giveni={M\bibinitperiod}}}%
+        {{hash=9ec90c7246fe504db54fcffeb162affa}{%
+           family={Chiaraluce},
+           familyi={C\bibinitperiod},
+           given={Franco},
+           giveni={F\bibinitperiod}}}%
+        {{hash=196bad0b99176284d1a841590a36cfb4}{%
+           family={Rosenthal},
+           familyi={R\bibinitperiod},
+           given={Joachim},
+           giveni={J\bibinitperiod}}}%
+        {{hash=ad52881578d33190d9ca50028c1b486c}{%
+           family={Schipani},
+           familyi={S\bibinitperiod},
+           given={Davide},
+           giveni={D\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{97a3f453a721e768e46c02dcc9e568eb}
+      \strng{fullhash}{1fbf813fb648a6307f4dd596c19d2883}
+      \strng{bibnamehash}{97a3f453a721e768e46c02dcc9e568eb}
+      \strng{authorbibnamehash}{97a3f453a721e768e46c02dcc9e568eb}
+      \strng{authornamehash}{97a3f453a721e768e46c02dcc9e568eb}
+      \strng{authorfullhash}{1fbf813fb648a6307f4dd596c19d2883}
+      \field{labelalpha}{Bal+16}
+      \field{sortinit}{B}
+      \field{sortinithash}{8de16967003c7207dae369d874f1456e}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Cryptology}
+      \field{number}{1}
+      \field{title}{Enhanced public key security for the McEliece cryptosystem}
+      \field{volume}{29}
+      \field{year}{2016}
+      \field{pages}{1\bibrangedash 27}
+      \range{pages}{27}
+    \endentry
+    \entry{canteaut1998cryptanalysis}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{hash=ed5c23a7ef39bddc3a73f1fadf4dafa6}{%
+           family={Canteaut},
+           familyi={C\bibinitperiod},
+           given={Anne},
+           giveni={A\bibinitperiod}}}%
+        {{hash=c530afca638cb5f6209d18e3a7d44ce1}{%
+           family={Sendrier},
+           familyi={S\bibinitperiod},
+           given={Nicolas},
+           giveni={N\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{38f04d0aadcd47b6482b20e5899be044}
+      \strng{fullhash}{38f04d0aadcd47b6482b20e5899be044}
+      \strng{bibnamehash}{38f04d0aadcd47b6482b20e5899be044}
+      \strng{authorbibnamehash}{38f04d0aadcd47b6482b20e5899be044}
+      \strng{authornamehash}{38f04d0aadcd47b6482b20e5899be044}
+      \strng{authorfullhash}{38f04d0aadcd47b6482b20e5899be044}
+      \field{labelalpha}{CS98}
+      \field{sortinit}{C}
+      \field{sortinithash}{4c244ceae61406cdc0cc2ce1cb1ff703}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{International Conference on the Theory and Application of Cryptology and Information Security}
+      \field{title}{Cryptanalysis of the original McEliece cryptosystem}
+      \field{year}{1998}
+      \field{pages}{187\bibrangedash 199}
+      \range{pages}{13}
+    \endentry
+    \entry{dottling2012cca2}{article}{}
+      \name{author}{4}{}{%
+        {{hash=38684df9941860ae7b815f9908ec9a66}{%
+           family={Dottling},
+           familyi={D\bibinitperiod},
+           given={Nico},
+           giveni={N\bibinitperiod}}}%
+        {{hash=6701dbaf9364991e8e7b5a417d0ca078}{%
+           family={Dowsley},
+           familyi={D\bibinitperiod},
+           given={Rafael},
+           giveni={R\bibinitperiod}}}%
+        {{hash=8950928e7be9ecbe54f6e99c6188722a}{%
+           family={Muller-Quade},
+           familyi={M\bibinithyphendelim Q\bibinitperiod},
+           given={J{ö}rn},
+           giveni={J\bibinitperiod}}}%
+        {{hash=bca2fd9dbf7b90de6199e50cc95f5966}{%
+           family={Nascimento},
+           familyi={N\bibinitperiod},
+           given={Anderson\bibnamedelima CA},
+           giveni={A\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{0c5f7bff9852ab6e7cf53cf8c6c4e25e}
+      \strng{fullhash}{12253ba80ac5c86fab3cbc51573f281a}
+      \strng{bibnamehash}{0c5f7bff9852ab6e7cf53cf8c6c4e25e}
+      \strng{authorbibnamehash}{0c5f7bff9852ab6e7cf53cf8c6c4e25e}
+      \strng{authornamehash}{0c5f7bff9852ab6e7cf53cf8c6c4e25e}
+      \strng{authorfullhash}{12253ba80ac5c86fab3cbc51573f281a}
+      \field{labelalpha}{Dot+12}
+      \field{sortinit}{D}
+      \field{sortinithash}{c438b3d5d027251ba63f5ed538d98af5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Information Theory}
+      \field{number}{10}
+      \field{title}{A CCA2 secure variant of the McEliece cryptosystem}
+      \field{volume}{58}
+      \field{year}{2012}
+      \field{pages}{6672\bibrangedash 6680}
+      \range{pages}{9}
+    \endentry
+    \entry{6553164}{article}{}
+      \name{author}{5}{}{%
+        {{hash=aa8b8237cb056f0805b542d2a33a5305}{%
+           family={{Faugère}},
+           familyi={F\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+        {{hash=730c1d8bbe1748129bea295468a4f4cd}{%
+           family={{Gauthier-Umaña}},
+           familyi={G\bibinitperiod},
+           given={V.},
+           giveni={V\bibinitperiod}}}%
+        {{hash=dc12e194a99e628046d04962fce05dad}{%
+           family={{Otmani}},
+           familyi={O\bibinitperiod},
+           given={A.},
+           giveni={A\bibinitperiod}}}%
+        {{hash=13db731131b56997fa586de31768dd81}{%
+           family={{Perret}},
+           familyi={P\bibinitperiod},
+           given={L.},
+           giveni={L\bibinitperiod}}}%
+        {{hash=442596546b879fe00db7db8aef0d475c}{%
+           family={{Tillich}},
+           familyi={T\bibinitperiod},
+           given={J.},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{bebaa46bf41e95cb1daecd1535cfd48e}
+      \strng{fullhash}{83e7c3dafae14c7facc294e61e1dce0f}
+      \strng{bibnamehash}{bebaa46bf41e95cb1daecd1535cfd48e}
+      \strng{authorbibnamehash}{bebaa46bf41e95cb1daecd1535cfd48e}
+      \strng{authornamehash}{bebaa46bf41e95cb1daecd1535cfd48e}
+      \strng{authorfullhash}{83e7c3dafae14c7facc294e61e1dce0f}
+      \field{labelalpha}{Fau+13}
+      \field{sortinit}{F}
+      \field{sortinithash}{fb0c0faa89eb6abae8213bf60e6799ea}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Information Theory}
+      \field{number}{10}
+      \field{title}{A Distinguisher for High-Rate McEliece Cryptosystems}
+      \field{volume}{59}
+      \field{year}{2013}
+    \endentry
+    \entry{Kunz1991}{book}{}
+      \name{author}{1}{}{%
+        {{hash=b28ad47b9d677d7c6d339a0c8dd90cc0}{%
+           family={Kunz},
+           familyi={K\bibinitperiod},
+           given={Ernst},
+           giveni={E\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Vieweg+Teubner Verlag}%
+      }
+      \strng{namehash}{b28ad47b9d677d7c6d339a0c8dd90cc0}
+      \strng{fullhash}{b28ad47b9d677d7c6d339a0c8dd90cc0}
+      \strng{bibnamehash}{b28ad47b9d677d7c6d339a0c8dd90cc0}
+      \strng{authorbibnamehash}{b28ad47b9d677d7c6d339a0c8dd90cc0}
+      \strng{authornamehash}{b28ad47b9d677d7c6d339a0c8dd90cc0}
+      \strng{authorfullhash}{b28ad47b9d677d7c6d339a0c8dd90cc0}
+      \field{labelalpha}{Kun91}
+      \field{sortinit}{K}
+      \field{sortinithash}{d3edc18d54b9438a72c24c925bfb38f4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Endliche K{ö}rper (Galois-Felder)}
+      \field{year}{1991}
+      \field{pages}{185\bibrangedash 190}
+      \range{pages}{6}
+    \endentry
+    \entry{ljubic2004exact}{article}{}
+      \name{author}{1}{}{%
+        {{hash=0522f70eb6dbdca4e6da4dcc5b16afed}{%
+           family={Ljubic},
+           familyi={L\bibinitperiod},
+           given={Ivana},
+           giveni={I\bibinitperiod}}}%
+      }
+      \strng{namehash}{0522f70eb6dbdca4e6da4dcc5b16afed}
+      \strng{fullhash}{0522f70eb6dbdca4e6da4dcc5b16afed}
+      \strng{bibnamehash}{0522f70eb6dbdca4e6da4dcc5b16afed}
+      \strng{authorbibnamehash}{0522f70eb6dbdca4e6da4dcc5b16afed}
+      \strng{authornamehash}{0522f70eb6dbdca4e6da4dcc5b16afed}
+      \strng{authorfullhash}{0522f70eb6dbdca4e6da4dcc5b16afed}
+      \field{labelalpha}{Lju04}
+      \field{sortinit}{L}
+      \field{sortinithash}{dad3efd0836470093a7b4a7bb756eb8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{PhD, Technische Universitat Wien, Vienna Austria}
+      \field{title}{Exact and memetic algorithms for two network design problems}
+      \field{year}{2004}
+    \endentry
+    \entry{McEliece1978public}{article}{}
+      \name{author}{1}{}{%
+        {{hash=3c3869dad29301d9bff7f1e3d6cc0695}{%
+           family={McEliece},
+           familyi={M\bibinitperiod},
+           given={Robert\bibnamedelima J},
+           giveni={R\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{3c3869dad29301d9bff7f1e3d6cc0695}
+      \strng{fullhash}{3c3869dad29301d9bff7f1e3d6cc0695}
+      \strng{bibnamehash}{3c3869dad29301d9bff7f1e3d6cc0695}
+      \strng{authorbibnamehash}{3c3869dad29301d9bff7f1e3d6cc0695}
+      \strng{authornamehash}{3c3869dad29301d9bff7f1e3d6cc0695}
+      \strng{authorfullhash}{3c3869dad29301d9bff7f1e3d6cc0695}
+      \field{labelalpha}{McE78}
+      \field{sortinit}{M}
+      \field{sortinithash}{2e5c2f51f7fa2d957f3206819bf86dc3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Coding Thv}
+      \field{title}{A public-key cryptosystem based on algebraic}
+      \field{volume}{4244}
+      \field{year}{1978}
+      \field{pages}{114\bibrangedash 116}
+      \range{pages}{3}
+    \endentry
+    \entry{nojima2008semantic}{article}{}
+      \name{author}{4}{}{%
+        {{hash=30308d9ee0f481ca4b65a2628f154708}{%
+           family={Nojima},
+           familyi={N\bibinitperiod},
+           given={Ryo},
+           giveni={R\bibinitperiod}}}%
+        {{hash=9ce6a51d98ce1d0ce1ff2c1d4211395a}{%
+           family={Imai},
+           familyi={I\bibinitperiod},
+           given={Hideki},
+           giveni={H\bibinitperiod}}}%
+        {{hash=d384c86fdaac99b829bd676cd43941d3}{%
+           family={Kobara},
+           familyi={K\bibinitperiod},
+           given={Kazukuni},
+           giveni={K\bibinitperiod}}}%
+        {{hash=7b87c96baec3c8e37def243ce163ac6e}{%
+           family={Morozov},
+           familyi={M\bibinitperiod},
+           given={Kirill},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{913ff7579a17c6a9d131f312c0d5286a}
+      \strng{fullhash}{cbe1d6b647a3d43d7b3ec38c8349b0ae}
+      \strng{bibnamehash}{913ff7579a17c6a9d131f312c0d5286a}
+      \strng{authorbibnamehash}{913ff7579a17c6a9d131f312c0d5286a}
+      \strng{authornamehash}{913ff7579a17c6a9d131f312c0d5286a}
+      \strng{authorfullhash}{cbe1d6b647a3d43d7b3ec38c8349b0ae}
+      \field{labelalpha}{Noj+08}
+      \field{sortinit}{N}
+      \field{sortinithash}{98cf339a479c0454fe09153a08675a15}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Designs, Codes and Cryptography}
+      \field{number}{1-3}
+      \field{title}{Semantic security for the McEliece cryptosystem without random oracles}
+      \field{volume}{49}
+      \field{year}{2008}
+      \field{pages}{289\bibrangedash 305}
+      \range{pages}{17}
+    \endentry
+    \entry{Schneier2007Applied}{book}{}
+      \name{author}{1}{}{%
+        {{hash=d8df23ab843a37bf97ea40354db74d15}{%
+           family={Schneier},
+           familyi={S\bibinitperiod},
+           given={Bruce},
+           giveni={B\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {John Wiley \& Sons}%
+      }
+      \strng{namehash}{d8df23ab843a37bf97ea40354db74d15}
+      \strng{fullhash}{d8df23ab843a37bf97ea40354db74d15}
+      \strng{bibnamehash}{d8df23ab843a37bf97ea40354db74d15}
+      \strng{authorbibnamehash}{d8df23ab843a37bf97ea40354db74d15}
+      \strng{authornamehash}{d8df23ab843a37bf97ea40354db74d15}
+      \strng{authorfullhash}{d8df23ab843a37bf97ea40354db74d15}
+      \field{labelalpha}{Sch07}
+      \field{sortinit}{S}
+      \field{sortinithash}{c319cff79d99c853d775f88277d4e45f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Applied cryptography: protocols, algorithms, and source code in C}
+      \field{year}{2007}
+    \endentry
+    \entry{Stinson2018Cryptography}{book}{}
+      \name{author}{2}{}{%
+        {{hash=698d544f5a91bc90280e1f93dc9f7f07}{%
+           family={Stinson},
+           familyi={S\bibinitperiod},
+           given={Douglas\bibnamedelima Robert},
+           giveni={D\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=edfa4b6b7479ffda33baa1b5e310ae23}{%
+           family={Paterson},
+           familyi={P\bibinitperiod},
+           given={Maura},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {CRC press}%
+      }
+      \strng{namehash}{51fec7b300b1cbb7897dda2172e05695}
+      \strng{fullhash}{51fec7b300b1cbb7897dda2172e05695}
+      \strng{bibnamehash}{51fec7b300b1cbb7897dda2172e05695}
+      \strng{authorbibnamehash}{51fec7b300b1cbb7897dda2172e05695}
+      \strng{authornamehash}{51fec7b300b1cbb7897dda2172e05695}
+      \strng{authorfullhash}{51fec7b300b1cbb7897dda2172e05695}
+      \field{labelalpha}{SP18}
+      \field{sortinit}{S}
+      \field{sortinithash}{c319cff79d99c853d775f88277d4e45f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Cryptography: theory and practice}
+      \field{year}{2018}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
