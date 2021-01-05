@@ -32,6 +32,13 @@
 \usepackage{tikz}
 \usetikzlibrary{shapes,arrows}
 
+\usepackage{arydshln}
+\usepackage{csquotes}
+\usetikzlibrary{positioning,shapes,snakes}
+\tikzset{main node/.style={circle,fill=blue!20,draw,minimum size=1cm,inner sep=0pt},}
+\tikzset{main rectangle/.style={rectangle,fill=blue!20,draw,minimum size=1cm,inner sep=0pt},}
+\tikzset{main ellipse/.style={ellipse,fill=blue!20,draw,minimum size=1cm, minimum width=1.5cm,inner sep=0pt},}
+
 \author{Lea Muth \and Benjamin Tröster}
 \title[Code-basierte Kryptografie]{Einführung Code-basierte Kryptografie}
 \subtitle{Code-basiertes Kryptosystem -- McEliece}
@@ -78,87 +85,663 @@
 \begin{frame}{Fahrplan Grundlagen}
 \tableofcontents[currentsection,currentsubsection]
 \end{frame}
+
+
+
+\subsection{Galoiskörper}
+\begin{frame}{Galoiskörper/Galoisfeld}
+	\begin{itemize}
+		\item Ein Galoiskörper $GF(p)$ , wobei $p$ prim, ist ein endlicher Körper welcher bezüglich '$+$' und '$*$' abgeschlossen ist.\\
+		\item Beispiel:\\
+		   $GF(2) = \mathbb{F}_{2} = \{0,1\}$: \cite{Kunz1991}\\
+		   \begin{align*}
+		   Addition: && Multiplikation: \\
+		    0+0=0  &&  0*0 = 0 \\
+		    0+1=1  &&  0*1 = 0\\
+		    1+0=1  &&  1*0 = 0\\
+ 		    1+1=0  &&  1*1 = 1\\
+		    \end{align*}
+	\end{itemize}
+\end{frame}
+ 
 \subsection{Hamming Gewicht und Distanz}
 \begin{frame}{Hamming Gewicht}
 	\begin{itemize}
-		\item Das Hamming Gewicht eines Vektors $x$ der Länge $n$ ist definiert als:
-		       \[ weight_{\Delta}(x):= \sum_{i=1}^n weight_{\Delta}(x_i)  \]
-		       \\mit\\ $weight_{\Delta}(x_i) = 1: x_i \neq 0$, \\$weight_{\Delta}(x_i) =0 : x_i = 0$ 
+		\item Das Hamming Gewicht $w(\cdot)$ eines Vektors $x$ mit Länge $n$ ist definiert als:
+		\begin{align*}
+		w(x):= \sum_{i=1}^n w(x_i) \qquad mit \qquad w(x_i) =
+		\begin{cases}
+		w(x_i) = 1: x_i \neq 0 \\
+		& \cr w(x_i) =0 : x_i = 0
+		\end{cases}
+		\end{align*}
      	\item Beispiel:
-					$$
-					weight_{\Delta}(\underline{1}00\underline{1})  = 2
-					$$
+     		\begin{align*}	
+     		    w(\underline{1}00\underline{1})  = 2\\
+     			w(0\underline{1}\underline{1}\underline{1})  = 3
+     		\end{align*}
 	\end{itemize}
 \end{frame}
 
 
-
 \begin{frame}{Hamming Distanz}
 	\begin{itemize}
-		\item Sei $\Sigma$ ein diskretes Alphabet und $c_1=(c_{1_1},\ldots,c_{1_n})$ ,$c_2=(c_{2_1},\ldots,c_{2_n})$ Codewörter sodass $c_1, c_2 \in C\subseteq\Sigma^n$, wboei $C$ die Menge der gültigen Codeworte darstellt
-		\item Hamming Distanz $d$ zwischen $c_1$ und $c_2$ ist definiert als: 
-		\[\Delta(c_1,c_2):=|\{i \in \{1,\ldots,n\}| c_{1_i}\neq c_{2_i} \}
+		\item Hamming Distanz $D(\cdot, \cdot)$ zwischen zwei validen Codewörten $c$ und $c'$ ist definiert als: 
+		\[D(c,c'):=|\{i \in \{1,\ldots,n\}| c_{i}\neq c'_{i} \}|
 		\]
 		\item Beispiel:
 			\begin{align*}
-		        11011001\oplus 10011101 = 0\underline{1}000\underline{1}00 &\implies \Delta(11011001,10011101) = 2
+		    	D(\underline{0}\underline{0}\underline{0},\underline{1}\underline{1}\underline{1}) = 3 \\
+		        D(0011\underline{0},0011\underline{1}) = 1 \\
+		        D(\vec{c},0000) = w(\vec{c})
 		    \end{align*}
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{Hamming Distanz}
+\begin{frame}{Minimale Hamming Distanz}
 	\begin{itemize}
-		\item Für mehr als zwei Worte versteht man das Minimum aller Abstände zwischen verschiedenen Wörtern innerhalb des Codes als deren Hamming Distanz.
-		\[d=\Delta(C):= \min_{\forall i,j \in \{1,\ldots,n\}|i\neq j}\Delta(c_i,c_j)\]
+		\item Die minimale Hamming Distanz d ist die kleinste Hamming Distanz zwischen zwei beliebigen gültigen Codewörten. 
+		\[d=\min_{c\neq c'}D(c,c')\]
+		\item Beispiel:~ $d=3$ \\
+\begin{tabular}{cc} 
+ \hspace*{-.3cm} 
+ \parbox{0.55\linewidth}{
+	\begin{table}[]
+\begin{tabular}{c}
+\hline
+Codewort \\ \hline
+000      \\
+111     
+\end{tabular}
+\end{table}
+
+} 
+& \begin{tabular}{c}
+ \begin{tabular}{c}
+    \centering
+        \includegraphics[scale=0.60]{pictures/d_gleich_3_bsp}
+\end{tabular}
+\end{tabular}\\
+\end{tabular}
+	\end{itemize}
+	\end{frame}
+	
+\begin{frame}{Minimale Hamming Distanz}
+	\begin{itemize}
+		\item Beispiel:~ $d=2$
+	\end{itemize}
+\begin{tabular}{cc} 
+ \hspace*{-.3cm} 
+ \parbox{0.35\linewidth}{
+      \begin{table}[]
+      \begin{tabular}{c}
+      \hline
+      Codewort \\ \hline
+      0000      \\
+      0011      \\
+      1100      \\
+      1111      
+      \end{tabular}
+      \end{table}
+} 
+& \begin{tabular}{c}
+ \begin{tabular}{c}
+        \includegraphics[scale=0.60]{pictures/d_gleich_2_bsp}
+\end{tabular}
+\end{tabular}\\
+\end{tabular}
+\end{frame}
+
+\begin{frame}{Minimale Hamming Distanz}
+	\begin{itemize}
+		\item Beispiel:~ $d=1$ 
+	\end{itemize}
+\begin{tabular}{cc} 
+ \hspace*{-.3cm} 
+ \parbox{0.35\linewidth}{
+      \begin{table}[]
+      \begin{tabular}{c}
+      \hline
+      Codewort \\ \hline
+      0000      \\
+      0001      \\
+      1110      \\
+      1111      
+      \end{tabular}
+      \end{table}
+} 
+& \begin{tabular}{c}
+ \begin{tabular}{c}
+        \includegraphics[scale=0.60]{pictures/d_gleich_1_und_3_bsp.png}
+\end{tabular}
+\end{tabular}\\
+\end{tabular}
+\end{frame}
+
+\begin{frame}{Hamming Code Projektion}
+\begin{tabular}{cc} 
+ \hspace*{-.3cm} 
+ \parbox{0.4\linewidth}{
+	\begin{itemize}
+	\item Ein $(7,4)$ Hamming-Code ohne mgl. Fehlerkorretur, da $d=1$
+	\item Projektion von $4d \to 7d$
+		\begin{itemize}
+		    \item D.h. 4 Bit Nachricht $abcd$ auf 7 Bit Code-Wort $abcd~xzy$ abgebildet
+		\end{itemize}
+		\item Bsp. $abcd \to abcd~xyz$ 
+		\begin{align*}
+		    x&= a \oplus b \oplus d\\
+		    y&= a \oplus c \oplus d\\
+		    z&= b \oplus c \oplus d
+		\end{align*}
+    \end{itemize}
+} 
+& \begin{tabular}{c}
+ \begin{tabular}{c}
+        \includegraphics[scale=0.60]{pictures/hamming_7_4_d_gleich_1.png}
+\end{tabular}
+\end{tabular}\\
+\end{tabular}
+\end{frame}
+
+
+\begin{frame}{Hamming Code}
+	\begin{itemize}
 		\item Beispiel:
 		\begin{align*}
-		    010\oplus 011 = 00\underline{1} &\implies \Delta(010,011) = 1\\
-		    010\oplus 101 = \underline{1}\underline{1}\underline{1} &\implies \Delta(010,101) = 3\\
-		    011\oplus 101 = \underline{1}\underline{1}0 &\implies \Delta(011,101) = 2
+		  abcd \to abcd~xyz && x&= a \oplus b \oplus d\\
+		  1001 \to 1001001 && y&= a \oplus c \oplus d\\
+		  0010 \to 0010011 && z&= b \oplus c \oplus d
 		\end{align*}
-		$$ 
-		d=\min\{1,3,2\}=1
-		$$
+
 	\end{itemize}
 \end{frame}
-\subsection{Galoiskörper}
-\begin{frame}{Galoiskörper}
+
+
+
+
+
+
+\begin{frame}{Hamming Code}
 	\begin{itemize}
-		\item Ein endlicher Körper der abgeschlossen bezüglich '$+$' und '$*$'.\\
+		\item Check-Bits $xyz$ können folgende Check-Bit-Status haben (Syndrome s)
+		\begin{table}[]
+        \begin{tabular}{l|lll}
+        \textbf{x y z} & \textbf{Error-State} & \textbf{a b c d} & \textbf{x y z}\\ \hline
+        \checkmark \checkmark \checkmark& no error & \checkmark\checkmark\checkmark\checkmark & \checkmark\checkmark\checkmark \\
+        $\times$ \checkmark \checkmark& x is wrong & \checkmark\checkmark\checkmark\checkmark & $\times$\checkmark\checkmark \\
+        \checkmark  $\times$  \checkmark& y is wrong & \checkmark\checkmark\checkmark\checkmark &\checkmark $\times$\checkmark \\
+        \checkmark \checkmark  $\times$ & z is wrong & \checkmark\checkmark\checkmark\checkmark & \checkmark\checkmark $\times$ \\ \hdashline
+        $\times$ $\times$ \checkmark& a is wrong & $\times$\checkmark\checkmark\checkmark & \checkmark\checkmark\checkmark \\
+        $\times$ \checkmark$\times$ &b is wrong & $\times$\checkmark\checkmark\checkmark & \checkmark\checkmark\checkmark \\
+        \checkmark$\times$ $\times$ & c is wrong & \checkmark\checkmark$\times$\checkmark & \checkmark\checkmark\checkmark \\
+        $\times$ $\times$ $\times$ & d is wrong & \checkmark\checkmark\checkmark $\times$ & \checkmark\checkmark\checkmark \\
+        \end{tabular}
+        \end{table}
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Hamming Code}
+	\begin{itemize}
+        \item Aus den Spalten können die Gleichungen wie folgt abgeleitet werden:
+        \begin{table}[]
+\begin{tabular}{l|l}
+& \textbf{x y z} \\ \hline
+a is wrong & $\times$ $\times$\checkmark \\
+b is wrong & $\times$\checkmark $\times$ \\
+c is wrong & \checkmark $\times$ $\times$ \\
+d is wrong &  $\times$ $\times$ $\times$ \\
+\end{tabular}
+\item
+    \begin{align*}
+		    x&= a \oplus b \oplus d\\
+		    y&= a \oplus c \oplus d\\
+		    z&= b \oplus c \oplus d
+		\end{align*}
+\end{table}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Hamming Code}
+	\begin{itemize}
+		\item Beispiel: (Fehlerkorrektur)
+		\begin{align*}
+		  abcd~xyz && x&= a \oplus b \oplus d\\
+		  1001~010 && y&= a \oplus c \oplus d\\
+		   && z&= b \oplus c \oplus d
+		\end{align*}
+
+	\end{itemize}
+\end{frame}
+
+
+
+\subsection{Generatormatrix}
+\begin{frame}{Generatormatrix I}
+	\begin{itemize}
+		\item Ein linearer binärer $(n,k,d)$-Code $C$ kann durch die Generatormatrix $G$ wie folgt charakterisiert werden:
+			\[C =\{c \in GF(2^n), m \in GF(2^k): c=m\cdot G\} \] 
+			
+        \begin{itemize}
+            \item $n$ Länge des Codeworts
+             \tikz[remember picture] \node[coordinate,yshift=0.5em] (n1) {}; 
+            \item $k$ Nachrichtenlänge
+            \tikz[remember picture] \node[coordinate] (n2) {};
+            \item $d$ minimale Distanz
+            \tikz[remember picture] \node[coordinate] (n3) {};
+        \end{itemize}
+			\item Beispiel:\\ 
+			\begin{itemize}
+		 \item$G=\begin{pmatrix} 1 & 0 & 0 & 0 & 1 & 1 & 0  \\ 0 & 1 & 0 & 0 & 1 & 0 & 1  \\ 0 & 0 & 1 & 0 & 0 & 1 & 1 \\0 & 0 & 0 & 1 & 1 & 1 & 1 \end{pmatrix}$
+		  (Hamming$(7,4)$-Code mit der Generatormatrix G)
+		 	\end{itemize}	
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Generatormatrix II}
+	\begin{itemize}
 		\item Beispiel:\\
-		   Die Restklassen modulo 2 bilden den Körper $\mathbb{F}_{2} = GF(2)$. \cite{Kunz1991}\\
-		   \begin{itemize}		  
-		   	\item Addition: $0+0=0$, $0+1=1$, $1+0=1$, $1+1=0$ \\
-		    \item Multiplikation: $0*0 = 0*1 = 1*0 = 0$, $1*1=1$ 	
+		Nachricht $m$ wird mittels der Generatormatrix $G$ in das zugehörige in das jeweilige Codewort $c$ transformiert und es gilt $m \cdot G=c$:\\
+		~\\
+        $$\begin{pmatrix} a & b & c & d\end{pmatrix} \cdot \begin{pmatrix} 1 & 0 & 0 & 0 & 1 & 1 & 0  \\ 0 & 1 & 0 & 0 & 1 & 0 & 1  \\ 0 & 0 & 1 & 0 & 0 & 1 & 1 \\0 & 0 & 0 & 1 & 1 & 1 & 1 \end{pmatrix} = \begin{pmatrix} a&b&c&d &&x&y&z\end{pmatrix}$$
+
+	\end{itemize}
+\end{frame}
+
+
+\subsection{Parity-Check-Matrix}
+\begin{frame}{Parity-Check-Matrix / Prüfmatrix}
+    \begin{itemize}
+        \item Ein linearer binärer $(n,k,d)$-Code $C$ kann durch die Prüfmatrix $H$ wie folgt charakterisiert werden:
+			\[C =\{c \in GF(2^n) : H\vec{c}^T =\vec{0}\} \] 
+ 
+        \item Bsp.: Hamming-Code $(7,4)$ mit Parity-Check-Bit-Gleichungen $abcd~xyz$
+        \begin{align*}
+		    a \oplus b \oplus d &= x\\
+		    a \oplus c \oplus d &= y\\
+		    b \oplus c \oplus d &= z
+		\end{align*}
+
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Parity-Check-Matrix / Prüfmatrix}   
+\begin{itemize}
+	\item Durch umformen erhalten wir ($\oplus \equiv -$):
+		\begin{align*}
+		    a \oplus b \oplus 0c \oplus d \oplus x \oplus 0y \oplus 0z &= 0\\
+		    a \oplus 0b \oplus c \oplus d \oplus 0x \oplus  y \oplus 0z &= 0\\
+		    0a \oplus b \oplus c \oplus d \oplus 0x \oplus 0y \oplus z &= 0
+		\end{align*}
+	
+
+		\item LGS kann als Matrix geschrieben werden, alle validen Codeworte erfüllen dies
+		\begin{align*}
+		    \begin{pmatrix}
+		            1 & 1 & 0 & 1 & 1 & 0 & 0 \\
+		            1 & 0 & 1 & 1 & 0 & 1 & 0 \\
+		            0 & 1 & 1 & 1 & 0 & 0 & 1 
+		    \end{pmatrix} 
+		    \cdot 
+		    \begin{pmatrix}
+		            a\\b\\c\\d\\x\\y\\z
+		    \end{pmatrix}^T
+		    =
+		    \begin{pmatrix}
+		          0\\0\\0  
+		    \end{pmatrix}
+		\end{align*}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Parity-Check-Matrix Beispiel}
+    \begin{itemize}
+        \item Ist $1101100$ ein valides Codewort?
+        \item Für valide Codewörter gilt: $H\cdot \Vec{c}^T = \Vec{0}$ 
+        \item Wende $H$ auf $\Vec{c}^T$ an:
+        \begin{align*}
+            H \cdot \vec{c}^T =
+             \begin{pmatrix}
+		            1 & 1 & 0 & 1 & 1 & 0 & 0 \\
+		            1 & 0 & 1 & 1 & 0 & 1 & 0 \\
+		            0 & 1 & 1 & 1 & 0 & 0 & 1 
+		    \end{pmatrix} \cdot
+		    \begin{pmatrix}
+                1\\1\\0\\1\\1\\1\\0\\0 
+		    \end{pmatrix}^T =
+		    \begin{pmatrix}
+		       0\\0\\0
+		    \end{pmatrix}
+        \end{align*}
+
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Parity-Check-Matrix Beispiel}
+    \begin{itemize}
+       \item Durch addieren eines Fehlers $H (\Vec{c} + \Vec{e})^T = H \cdot \Vec{c}^T + H \cdot \Vec{e}^T = H \cdot\Vec{e}^T$
+        \begin{align*}
+            H \cdot \vec{c}^T =
+             \begin{pmatrix}
+		            1 & 1 & 0 & 1 & 1 & 0 & 0 \\
+		            1 & 0 & 1 & 1 & 0 & 1 & 0 \\
+		            0 & 1 & 1 & 1 & 0 & 0 & 1 
+		    \end{pmatrix} \cdot
+		    \begin{pmatrix}
+                1\\1\\0\\1\\1\\1\\0\\0 
+		    \end{pmatrix}^T\cdot
+		    \begin{pmatrix}
+                0\\1\\0\\0\\0\\0\\0\\0 
+		    \end{pmatrix}^T =
+		    \begin{pmatrix}
+		       0\\0\\0
+		    \end{pmatrix}^T
+		    +	    \begin{pmatrix}
+		       1\\0\\1
+		    \end{pmatrix}^T =  \begin{pmatrix}
+		       1\\0\\1
+		    \end{pmatrix}^T
+        \end{align*}
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Recap / Idee der fehlerkorrigierenden Codes}
+ \begin{tabular}{cc} 
+ \hspace*{-.3cm} 
+ \parbox{0.35\linewidth}{
+	\begin{itemize}
+        \item Gültige Codewörter helfen nicht bei der Fehlerkorrektur
+        \item Ungültige helfen, da wir diese \enquote{auseinander} ziehen können
+    \end{itemize}
+} 
+& \begin{tabular}{l}
+ \begin{tabular}{c}
+    \begin{tikzpicture}
+    \node[main node] (1) {food};
+    \node[main rectangle] (2) [left = of 1]  {f\underline{r}od};
+    \node[main ellipse] (3) [right = of 1] {good};
+    \node[main ellipse] (4) [above right = of 1] {wood};
+    \node[main rectangle] (5) [below right = of 1] {\underline{e}ood};
+    \node[main rectangle] (6) [below = of 1] {fo\underline{q}d};
+    \node[main ellipse] (7) [below left = of 1] {fool};
+    \node[main ellipse] (8) [above left = of 1] {foot};
+    \node[main ellipse] (9) [above = of 1] {foox};
+    
+    \path[-] (1) edge node {} (2);
+    \path[-] (1) edge node {} (3);
+    \path[-] (1) edge node {} (4);
+    \path[-] (1) edge node {} (5);
+    \path[-] (1) edge node {} (6);
+    \path[-] (1) edge node {} (7);
+    \path[-] (1) edge node {} (8);
+    \path[-] (1) edge node {} (9);
+    \end{tikzpicture}
+\end{tabular}
+\end{tabular}\\
+\end{tabular}
+\end{frame}
+
+
+
+
+\begin{frame}{Recap / Idee der fehlerkorrigierenden Codes}
+ \begin{tabular}{cc} 
+ \hspace*{-.3cm} 
+ \parbox{0.65\linewidth}{
+	\begin{itemize}
+        \item Generatormatrix $G = [1,1,1]$ transformiert $1$-Bit Nachrichten in $3$-Bit Codeworte
+        \item Fehler können angeordnet werden, durch das Füllen der Lücken mit ungültigen Codeworten werden Fehler zuordenbar und  korrigierbar
+         \item Beispiel: \\
+         $0\cdot[111] \to [0,0,0]$ und $1\cdot[1,1,1] \to [0,0,0]$ 
+    \end{itemize}
+} 
+& \begin{tabular}{c}
+ \begin{tabular}{c}
+        \includegraphics[scale=0.7]{pictures/d_gleich_3_bsp}
+\end{tabular}
+\end{tabular}\\
+\end{tabular}
+\end{frame}
+
+\begin{frame}{Beispiel Hamming(7,4)-Code}
+\begin{figure}
+    \centering
+    \includegraphics[scale=0.35]{pictures/hamming_7_4_bsp.png}
+    \label{fig:my_label}
+\end{figure}
+\end{frame}
+
+\subsection{Lineare Codes}
+\begin{frame}{Lineare Codes}
+	\begin{itemize}
+		\item \textbf{Defintion:} Ein binärer $(n,k,d)$-Code ist linear, die $\oplus$-Summe zweier beliebiger gültiger Codeworte $c$ und $c'$ wiederum ein gültiges Codewort ergibt:
+			\[\forall c,c' \in C \colon c\oplus c' \in C \]
+			\begin{itemize}	
+		     \item Beispiel: $(0,1,1)+(0,1,1)=(0,0,0)$
+	    	\end{itemize}
+		\item Bei gegebener Hamming Distanz $d$ wird der Code C auch $(n,k,d)$-Code genannt
+
+	\end{itemize}
+\end{frame}
+
+
+
+\subsection{Zyklischer Code}
+\begin{frame}{Zyklischer Code}
+\begin{itemize}
+	\item \textbf{Definition:} Ein binärer $(n,k,d)$-Code heißt zyklisch, wenn jede zyklische Verschiebung (Shift) eines gültiges Codewortes $c$ wiederum ein gültiges Codewort ergibt:
+			\[\forall ~ c=(c_1,c_2,\dots,c_n) \in C \implies c'=(c_n,c_1,c_2,\dots,c_{n-1}) \in C \]
+			\begin{itemize}	
+		     \item Beispiel: $(10100) \in C \implies (01010) \in C$
+	    	\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\subsection{Zyklischer linearer Code}
+\begin{frame}{Zyklischer linearer Code}
+\begin{itemize}
+	\item \textbf{Defintion:} Ein binärer $(n,k,d)$-Code ist linear und zyklisch wenn:
+			\begin{itemize}	
+		     \item Die $\oplus$-Summe zweier beliebiger Codeworte $c$ und $c'$ wiederum ein gültiges Codewort ergibt:
+			\[\forall c,c' \in C \colon c\oplus c' \in C \]
+
+	    \item Jede zyklische Verschiebung eines Codeworte $c$ wiederum ein gültiges Codewort ergibt:
+			\[\forall ~ c=(c_0,c_1,\dots,c_{n_1}) \in C \implies c'=(c_{n_1},c_0,c_1,\dots,c_{n_2}) \in C \]
+
+	    	\end{itemize}
+\end{itemize}
+ \end{frame}
+ 
+\begin{frame}{Zyklischer linearer Code}
+		\begin{itemize}	
+		\item Beispiel:\\
+		Gegeben ein Generatorcodewort (100100):
+	    	\begin{itemize}	
+		     \item Mehrfaches Verschieben bis hin zum ursprünglichen Codewort 
+		     \[(100100) \implies (010010) \implies (001001)\implies (100100)\]
+	    	\end{itemize}
+
+	    	\end{itemize}
+ 
+\end{frame}
+
+\begin{frame}{Zyklischer linearer Code}
+		\begin{itemize}	
+		\item Beispiel:\\
+		Gegeben ein Generatorcodewort $c_{gen}$ (100100):
+	    	\begin{itemize}	
+		     \item Addieren um die restlichen Codeworte zu erhalten:
+		     \begin{align*}
+		        (100100) + (100100) &= (000000)\\
+		     (100100) + (010010) &= (110110)\\
+		    (100100) + (001001) &= (101101)\\
+		     (010010) + (101101) &= (111111)
+		       \end{align*}
+	    	\end{itemize}
+	    	\end{itemize}
+ 
+\end{frame}
+
+\begin{frame}{Zyklischer linearer Code in polynomialer Darstellung}
+	\begin{itemize}	
+		\item 	Die Zeichen eines Codewortes $c$ lassen sich als Koeffizienten eines Polynomes $c(x)$ betrachten:
+		\[\forall  c=(c_0,c_1,\dots,c_{n_1}) \iff c(x) = c_0 + c_1x + \dots + c_{n_1}\]
+	  \item Das Polynom des Generatorcodewortes ist das Generatorpolynom\\
+	    	\begin{itemize}	
+		     \item Beispiel:
+		     \begin{align*}
+		         (1011) &= \underline{1}\cdot X^0+= \underline{0}\cdot X^1+= \underline{1}\cdot X^1+= \underline{1}\cdot X^3
+		     \end{align*}
 		   	\end{itemize}
-	\end{itemize}
+    \end{itemize}
 \end{frame}
 
-\subsection{Linear-Codes}
-\begin{frame}{Linear-Codes}
+\subsection{Generatorpolynom}
+\begin{frame}{Generatorpolynom}
+	\begin{itemize}	
+	\item \textbf{Defintion:} Ein von null verschiedenes Polynom $g$ minimalen Grades eines zyklischen Codes heißt Generatorpolynom.
+	\item  Ein zyklischer Code der Länge $n$ mit einem Generatorpolynom $g$ des Grades $r$ hat einen Coderaum der Dimension $r=n-k$ und codiert somit $r$ -viele Bits pro Codewort.
+	
+	\end{itemize}
+\end{frame}
+ 
+ 
+\subsection{Generatorpolynom}
+\begin{frame}{Generatorpolynom}
+\begin{tabular}{cccc} 
+ \hspace*{-.3cm} 
+ \parbox{0.55\linewidth}{
+\begin{table}[]
+\begin{tabular}{ll}
+\hline
+\multicolumn{1}{l}{Nachricht} & \multicolumn{1}{l}{Codewortpolynomial} \\ \hline
+0                              &    0                                   \\
+1                              &     $x^3+1$                                    \\
+x                              &       $x^4+x$                                     \\
+$x+1$                            &  $x^4+x^3+x+1$                                          \\
+$x^2$                         &     $x^5+x^2$                                       \\
+$x^2+1$                         &     $x^5+x^3+x^2+1$                                       \\
+$x^2+x$                         &      $x^5+x^4+x^2+x$                                       \\
+$x^2+x+1$                         &     $x^5+x^4+x^3+x^2+x+1$                                        
+\end{tabular}
+\end{table}
+} 
+& \begin{tabular}{c}
+ \begin{tabular}{c}
+        \includegraphics[scale=0.40]{pictures/genpolynom_3_d.png}
+\end{tabular}
+\end{tabular}\\
+\end{tabular}
+\end{frame}
+
+\begin{frame}{Recap Generatormatrix / Generatorpolynom}
+\begin{tabular}{cccc} 
+ \hspace*{-.3cm} 
+ \parbox{0.45\linewidth}{
+    \begin{table}[]
+    \begin{tabular}{cc}
+    \hline
+    Nachricht & Codewort \\ \hline
+    0         & 00       \\
+    1         & 11      
+    \end{tabular}
+    \end{table}
+} 
+& \begin{tabular}{c}
+ \begin{tabular}{c}
+        \includegraphics[scale=0.225]{pictures/gen_matrix_polynom_vergleich_2_d_matrix.png}
+\end{tabular}
+\end{tabular}\\
+\parbox{0.45\linewidth}{
+    \begin{table}[]
+    \begin{tabular}{cc}
+    \hline
+    Nachricht & Codewort \\ \hline
+    0         & 0       \\
+    1         & $1+x$      
+    \end{tabular}
+    \end{table}
+} &\begin{tabular}{c}
+ \begin{tabular}{c}
+        \includegraphics[scale=0.225]{pictures/gen_matrix_polynom_vergleich_2_d_poylnom.png}
+\end{tabular}
+\end{tabular}\\
+\end{tabular}
+\end{frame}
+
+\begin{frame}{Recap Generatormatrix / Generatorpolynom}
+\begin{tabular}{cccc} 
+ \hspace*{-.3cm} 
+ \parbox{0.45\linewidth}{
+    \begin{table}[]
+    \begin{tabular}{cc}
+    \hline
+    Nachricht & Codewort \\ \hline
+    0         & 000       \\
+    1         & 111      
+    \end{tabular}
+    \end{table}
+} 
+& \begin{tabular}{c}
+ \begin{tabular}{c}
+        \includegraphics[scale=0.50]{pictures/d_gleich_3_bsp.png}
+\end{tabular}
+\end{tabular}\\
+\parbox{0.45\linewidth}{
+    \begin{table}[]
+    \begin{tabular}{cc}
+    \hline
+    Nachricht & Codewort \\ \hline
+    0         & 0       \\
+    1         & $1+x+x^2$      
+    \end{tabular}
+    \end{table}
+} &\begin{tabular}{c}
+ \begin{tabular}{c}
+        \includegraphics[scale=0.25]{pictures/gen_matrix_polynom_vergleich_3_d_poylnom.png}
+\end{tabular}
+\end{tabular}\\
+\end{tabular}
+\end{frame}
+
+
+\begin{frame}{Goppa-Code}
 	\begin{itemize}
-		\item Ein binärer Blockcode $C\subseteq GF(2^n) \subseteq \Sigma^n$ heißt linearer Code, wenn gilt:
-			\[\forall c_1,c_2 \in C \colon c1\oplus c2 \in C \]
-		\item Bei gegebener Hamming Distanz $d$ wird der Code C auch $(n,k,d)$-Code genannt. 
-	\end{itemize}
+		\item Ein binärer Goppa-Code ist ein linearer zyklischer $(n,k,d)$-Code, der durch ein Generatorpolynom $g$ definiert ist und $\lfloor \frac{d-1}{2} \rfloor$ Fehler korrigieren kann. 
+
+	
+  \end{itemize}
 \end{frame}
 
-
-\subsection{Goppa-Codes}
-
-\begin{frame}{Goppa-Codes}
-	\begin{itemize}
-		\item Ein Goppa Polynom $g_i \in GF(p^m)$ wird definiert durch:
-			\[ g(x) = g_0+g_1x +\ldots+ g_tx^t = \sum_{i=0}^t g_ix^i \]
-		\item Es sei L eine endliche Untergruppe $GF(p^m)$, wobei p eine Primzahl ist.
-			\[L =\{\alpha_1,\ldots\alpha_n\}\subseteq GF(p^m) \] mit $g(\alpha_i)\neq 0~ \forall \alpha_i \in L$. 
-	\end{itemize}
+\subsection{McElice Kodierungsproblem}
+\begin{frame}{McElice Kodierungsproblem}
+    \begin{itemize}
+        \item McElice basiert auf klassischen Dekodierungsproblemen \cite{berlekamp1978inherent}
+        \item Sei $C$ ein linearer $(n,k)$ Code über $\mathbb{F}$ und $y \in C$ das empfangene Codewort
+        \item Somit ist $s = y \cdot H$ Syndrom des empfangenen Worts, wobei $H$ die Parity-Check-Matrix ist
+        \item Die beste Abschätzung der empfangen Nachricht des Codeworts ist $x= y + z_0$ ($z$ Fehlervektor), wobei $z_0$ minimal bzgl. der Gleichung $s=z \cdot H$ ist
+        \item Problem: finde $x \in C$ mit minimaler Distanz zwischen $y,x$ 
+        \item Im Mittel muss jedoch die gesamte Lösungsmenge für $s=y \cdot H$ durchsucht werden, um die minimale Distanz zu finden
+        \begin{itemize}
+            \item Größe des Lösungsraums ist jedoch $2^k$
+        \end{itemize}
+        \item Ein Algorithmus $\mathcal{A}$ mit gegebener Matrix $H$ und Vektor $s$ soll die Lösung der minimale Gewichtung für $y \cdot H = s$ finden, kann für die Eingabe nur eine Exponentialfunktion sein.
+    \end{itemize}
 \end{frame}
-\begin{frame}{(binary) Goppa-Codes}
-	\begin{itemize}
-		\item Ein binärer Goppa-Code $\Gamma(L,g(x))$ ist ein $(n,k,d)$-Code, der durch ein Generatorpolynom $g(x) \in GF(2^n)$ vom Grad $t$ und einer Sequenz $L$, über dem endlichen Körper $GF(2^n)$ definiert ist. 
-	\end{itemize}
+
+\subsection{McElice Kodierungsproblem}
+\begin{frame}{McElice Kodierungsproblem}
+    \begin{itemize}
+        \item Beweis der $\mathcal{NP}$-Härte in \cite{berlekamp1978inherent} via Reduktionsbeweis der Entschediugngsprobleme
+        \begin{itemize}
+            \item Coset-Weight
+            \item Subspace-Weight
+        \end{itemize}
+    \end{itemize}
 \end{frame}
+
 
 \section{McEliece -- Code-basierte Kryptografie}
 
@@ -202,7 +785,7 @@
         \begin{itemize}
             \item Blocklänge Chiffretext: $n = 2^m$
             \item Nachricht Blocklänge $k = n - m \cdot t$
-            \item Minimale \emph{Hamming-Distance} $d$ des Codes $C$: $d = 2 \cdot t + 1$
+            \item Minimale Hamming-Distanz $d$ des Codes $C$: $d = 2 \cdot t + 1$
         \end{itemize}
     \end{itemize}   
 \end{frame}
@@ -233,7 +816,7 @@
     \end{itemize}
     \item Erzeuge zufällige, binäre, nicht singuläre\footnote{M.a.W. $S$ ist regulär, $\det S \neq 0$; wichtig für Invertierbarkeit} \emph{Scramble-Matrix} $S^{k \times k}$
     \begin{itemize}
-        \item $S$ muss in $\mathbb{Z}_2$ invertierbar sein
+        \item $S$ muss in $GF(2)$ invertierbar sein
     \end{itemize}
     \item Permutationsmatrix $P^{n \times n}$
     \begin{itemize}
@@ -257,7 +840,7 @@
             \item Gewichtung $t$: maximale Anzahl Einsen in $z$
             \item Fehlervektor erlaubt es Chiffre an maximal $t$ Stellen zu invertieren
         \end{itemize}   
-        \item $Enc_{pub}(m,z) = c = m \cdot G + z$
+        \item $Enc_{pub}(m,G', z) = m \cdot G' + z = c$
     \end{itemize}
 \end{frame}
     
@@ -332,7 +915,7 @@ $$
 Nachricht $m = \begin{pmatrix} 1 1 0 1 \end{pmatrix}$, Fehlervektor $z$ mit maximalem Gewicht $t = 1$ und Länge $n = 7$: \\
 Wähle $z =  \begin{pmatrix} 0 0 0 0 1 0 0 \end{pmatrix}$ 
 $$
-    Enc_{pub}(m,z) = c = m \cdot G' + z
+    Enc_{pub}(m, G', z) = c = m \cdot G' + z
 $$
 \begin{align*}
     m &= \begin{pmatrix} 1 & 1 & 0 & 1 \end{pmatrix} \cdot \begin{pmatrix} 1 & 1 & 1 & 1 & 0 & 0 & 0 \\ 1 & 1 & 0 & 0 & 1 & 0 & 0 \\ 1 & 0 & 0 & 1 & 1 & 0 & 1 \\ 0 & 1 & 0 & 1 & 1 & 1 & 0 \end{pmatrix} + \begin{pmatrix} 0 & 0 & 0 & 0 & 1 & 0 & 0 \end{pmatrix}\\
@@ -353,7 +936,7 @@ Invertierung der Permuation $c' = cP^{-1}$
 \begin{frame}{Beispiel McElicece-Kryptosystem, cont'}
 \begin{itemize}
     \item Dekodierung des Hamming-Codes:
-    \item Berehcne Hamming-Distanz $d$ der Generator-Matrix $G$: $\begin{pmatrix} 1 & 3 & 3 & 2 \end{pmatrix}$
+    \item Berechne Hamming-Distanz $d$ der Generator-Matrix $G$: $\begin{pmatrix} 1 & 3 & 3 & 2 \end{pmatrix}$
     \item Somit ist $m' = \begin{pmatrix} 1 & 0 & 0 & 0\end{pmatrix}$
     \item Berechne Klartext $m$
 \end{itemize}
@@ -365,17 +948,24 @@ Invertierung der Permuation $c' = cP^{-1}$
 \end{align*}
 \end{frame}
 
-\subsection{Vor- \& Nachteile}
-\begin{frame}{Vor- \& Nachteile}
+
+\subsection{Ausblick}
+\begin{frame}{Ausblick}
     \begin{itemize}
-        \item The good news: Es gab keine erfolgreichen Angriffe gegen das McEliece-Verfahren
+        \item The good news: Es gab keine erfolgreichen Angriffe gegen das eigentliche McEliece-Verfahren
         \item Verhfahren gilt als  \emph{IND-CCA2} \cite{dottling2012cca2} sicher, somit ist es auch \emph{IND-CPA} sicher \cite{nojima2008semantic}
-        \item Angriffe McEliece mit originalen Parametern von 1978 in 1400 Tagen (Einzelne Machine) oder in 7 Tagen mithilfe von 200 CPUs \cite{baldi2016enhanced}, \cite{canteaut1998cryptanalysis}
+        \item Angriffe McEliece mit originalen Parametern von 1978 in 1400 Tagen (Einzelne Machine) oder in 7 Tagen mithilfe von 200 CPUs \cite{baldi2016enhanced}
+        \item Statisches Angriff auf McEliece \cite{canteaut1998cryptanalysis}
         \item Jedoch:
         \begin{itemize}
             \item Bruce Schneier: McEliece-Kryptosystem etwa 2 bis 3 mal langsamer als RSA \cite[S. 479ff]{Schneier2007Applied}
-            \item Extrem große öffentliche Schlüssel: $\hat{G}$ ist Matrix $k \times n$
-            \item Bei Parameter $(1024,524,101)$ ist $k \cdot n = 1024 \cdot 524 = 536576$ Bit also etwa 67$kBytes$
+            \begin{itemize}
+                \item Leider keine Angabe, wie die Werte zustande kommen
+            \end{itemize}
+            \item Extrem große öffentliche Schlüssel: $G'$ ist Matrix $k \times n$
+            \begin{itemize}
+                \item Bei Parameter $(1024,524,101)$ ist $k \cdot n = 1024 \cdot 524 = 536576$ Bit also etwa 67$kBytes$
+            \end{itemize}
             \item Chiffretext ist fast doppelt so groß wie Klartext, aus $524 Bit$ klartext werden zu $1024$ Bit Chiffre 
         \end{itemize}
      \end{itemize}
@@ -386,5 +976,25 @@ Invertierung der Permuation $c' = cP^{-1}$
 \begin{frame}[allowframebreaks]
   \frametitle<presentation>{Quellen}
 \printbibliography
+\end{frame}
+
+\begin{frame}{Genereller Hamming-Code}
+    \begin{itemize}
+        \item \textbf{Defintion:} Ein genereller Hamming-Code kann als Parity-Check-Matrix $H$ mit allen möglichen Kombinationen aus Einsen und Nullen dargestellt werden (ausgenommen eine Null-Spalte)
+        \item Matrix hat $r$ Zeilen und $2^r - 1$ Spalten 
+        \item $r$ dieser Spalten sind für die Paritäts-Bits, da es $2^r - 1 - r = k$
+
+    \end{itemize}
+    \begin{tikzpicture}[overlay,remember picture]
+      \path (n2) -| node[coordinate] (n2) {} (n1);
+      \draw[thick,decorate,decoration={brace,amplitude=3pt}]
+            (n1) -- (n2) node[midway, right=4pt] {(n,k)-Code};
+     \path (n3) -| node[coordinate] (n3) {} (n1);
+      \draw[thick,decorate,decoration={brace,amplitude=3pt}]
+            (n1) -- (n3) node[midway, right=2.25cm] {(n,k,d)-Code};
+  \end{tikzpicture}
+  \begin{itemize}
+      \item Längere Codes werden Effizienter hinsichtlich der Fehlerkorrektur 
+  \end{itemize}
 \end{frame}
 \end{document}
